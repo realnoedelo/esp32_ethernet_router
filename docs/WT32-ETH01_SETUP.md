@@ -47,16 +47,25 @@ ERASE=1 ./flash.sh /dev/ttyUSB0
 Windows users can run the equivalent `esptool` command from the repository's
 [Installation section](../README.md#installation).
 
-## First boot
+## Automatic first-boot AP setup
+
+When no upstream Wi-Fi credentials are stored (the factory-fresh state), the
+firmware automatically brings up the Ethernet onboarding AP. It uses
+`192.168.4.1/24`, starts DHCP, and runs the web configuration page; captive
+portal DNS requests are redirected to that page as well.
 
 1. Connect a computer or switch to the Ethernet port and leave the client set
    to DHCP.
-2. Open `http://192.168.4.1`.
+2. Open `http://192.168.4.1` (or any HTTP URL if the client follows captive
+   portal redirects).
 3. In **Configuration**, enter the upstream Wi-Fi SSID and password and save.
-4. After the reboot, confirm the Wi-Fi uplink is connected on the **Status**
-   page.
-5. Set a web password in **Web UI Settings** before connecting the router to
-   an untrusted network.
+4. The router reboots, stores the credentials in NVS, and starts the Wi-Fi STA
+   uplink automatically.
+5. Confirm the uplink on the **Status** page and set a web password in **Web
+   UI Settings** before connecting the router to an untrusted network.
+
+This onboarding network is the wired Ethernet downlink; the firmware does not
+need a separate Wi-Fi softAP for first-run configuration.
 
 The default Ethernet address is `192.168.4.1/24`. DHCP and NAT are enabled by
 default, so wired clients can reach the Internet without a static route.
